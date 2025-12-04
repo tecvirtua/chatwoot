@@ -1,10 +1,19 @@
 FROM ghcr.io/fazer-ai/chatwoot:latest
 
+# Dependências frontend
 RUN apk add --no-cache nodejs npm \
   && npm install -g pnpm
 
 WORKDIR /app
 
+# Copia os arquivos customizados
+COPY custom/app/app/javascript/dashboard/components-next/sidebar/Sidebar.vue \
+     /app/app/javascript/dashboard/components-next/sidebar/Sidebar.vue
+
+COPY custom/app/app/javascript/dashboard/routes/dashboard/conversation/ContactPanel.vue \
+     /app/app/javascript/dashboard/routes/dashboard/conversation/ContactPanel.vue
+
+# Recompila os assets
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN pnpm install \
  && RAILS_ENV=production bundle exec rake assets:precompile
