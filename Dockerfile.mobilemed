@@ -1,0 +1,10 @@
+FROM ghcr.io/fazer-ai/chatwoot:latest
+
+RUN apk add --no-cache nodejs npm \
+  && npm install -g pnpm
+
+WORKDIR /app
+
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+RUN pnpm install \
+ && RAILS_ENV=production bundle exec rake assets:precompile
