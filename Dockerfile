@@ -2,8 +2,8 @@
 FROM ghcr.io/fazer-ai/chatwoot:latest
 
 # Sobrescreve os arquivos customizados (seu menu/contato)
-COPY custom/app/app/javascript/dashboard/components-next/Sidebar.vue \
-     /app/app/javascript/dashboard/components-next/Sidebar.vue
+COPY custom/app/app/javascript/dashboard/components-next/sidebar/Sidebar.vue \
+     /app/app/javascript/dashboard/components-next/sidebar/Sidebar.vue
 
 COPY custom/app/app/javascript/dashboard/routes/dashboard/conversation/ContactPanel.vue \
      /app/app/javascript/dashboard/routes/dashboard/conversation/ContactPanel.vue
