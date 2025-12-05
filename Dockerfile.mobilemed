@@ -5,8 +5,8 @@ FROM ghcr.io/fazer-ai/chatwoot:latest
 COPY custom/app/app/javascript/dashboard/components-next/Sidebar.vue \
      /app/app/javascript/dashboard/components-next/Sidebar.vue
 
-COPY custom/app/app/javascript/dashboard/components-next/ContactPanel.vue \
-     /app/app/javascript/dashboard/components-next/ContactPanel.vue
+COPY custom/app/app/javascript/dashboard/routes/dashboard/conversation/ContactPanel.vue \
+     /app/app/javascript/dashboard/routes/dashboard/conversation/ContactPanel.vue
 
 # Recompila os assets depois de sobrescrever os arquivos
 WORKDIR /app
