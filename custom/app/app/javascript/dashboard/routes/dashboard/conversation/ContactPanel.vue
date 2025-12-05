@@ -137,7 +137,7 @@ onMounted(() => {
         @end="onDragEnd"
       >
         <template #item="{ element }">
-          <div v-else-if="element.name === 'previous_conversation'">
+          <div v-if="element.name === 'previous_conversation'">
             <AccordionItem
               v-if="contact.id"
               :title="
