@@ -1,14 +1,11 @@
 # Usa a imagem da Fazer.AI como base
 FROM ghcr.io/fazer-ai/chatwoot:latest
 
-# Instala Node.js e pnpm para poder recompilar
-RUN apt-get update && apt-get install -y curl && \
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g pnpm && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+# Instala Node.js e pnpm (Alpine usa apk, não apt-get)
+RUN apk add --no-cache nodejs npm && \
+    npm install -g pnpm
 
-# Sobrescreve os arquivos customizados (seu menu/contato)
+# Sobrescreve os arquivos customizados
 COPY custom/app/app/javascript/dashboard/components-next/sidebar/Sidebar.vue \
      /app/app/javascript/dashboard/components-next/sidebar/Sidebar.vue
 
