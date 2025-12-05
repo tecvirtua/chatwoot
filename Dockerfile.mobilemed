@@ -1,44 +1,13 @@
-# 1. Clona sempre a última versão do Chatwoot (Fazer.AI)
-FROM alpine/git AS source
-WORKDIR /src
-RUN git clone https://github.com/fazer-ai/chatwoot.git .
-# Para sempre pegar a última release estável, você pode usar:
-# RUN git checkout $(git describe --tags `git rev-list --tags --max-count=1`)
+# Sempre pegar a ÚLTIMA imagem do Chatwoot da Fazer.AI
+FROM ghcr.io/fazer-ai/chatwoot:latest
 
-# 2. Constrói a imagem usando o Dockerfile original do Chatwoot
-FROM node:18 AS node_builder
-WORKDIR /app
-COPY --from=source /src /app
-RUN npm install -g yarn
-RUN yarn install --frozen-lockfile
-RUN yarn build
-
-FROM ruby:3.2 AS rails_builder
-WORKDIR /app
-COPY --from=source /src /app
-RUN gem install bundler
-RUN bundle install
-RUN RAILS_ENV=production bundle exec rake assets:precompile
-
-# 3. Monta a imagem final
-FROM ruby:3.2
-
-WORKDIR /app
-
-# Copia o código já compilado
-COPY --from=rails_builder /app /app
-
-# 4. Sobrescreve seus arquivos customizados
+# Sobrescreve os arquivos customizados (seu menu/contato)
 COPY custom/app/app/javascript/dashboard/components-next/Sidebar.vue \
-     app/javascript/dashboard/components-next/Sidebar.vue
+     /app/app/javascript/dashboard/components-next/Sidebar.vue
 
 COPY custom/app/app/javascript/dashboard/components-next/ContactPanel.vue \
-     app/javascript/dashboard/components-next/ContactPanel.vue
+     /app/app/javascript/dashboard/components-next/ContactPanel.vue
 
-# 5. Recompila somente o frontend após sobrescrever
-RUN cd /app && RAILS_ENV=production bundle exec rake assets:precompile
-
-# 6. Porta padrão
-EXPOSE 3000
-
-CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+# Recompila os assets depois de sobrescrever os arquivos
+WORKDIR /app
+RUN RAILS_ENV=production bundle exec rake assets:precompile
